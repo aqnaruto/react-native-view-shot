@@ -1,17 +1,17 @@
-
 package fr.greweb.reactnativeviewshot;
-
 import android.content.Context;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+import android.net.Uri;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.View;
-
+import android.app.Activity;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-
 import com.facebook.react.bridge.GuardedAsyncTask;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.Promise;
@@ -19,7 +19,6 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.UIBlock;
 import com.facebook.react.uimanager.UIManagerModule;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -27,14 +26,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RNViewShotModule extends ReactContextBaseJavaModule {
-
     private final ReactApplicationContext reactContext;
-
     public RNViewShotModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
     }
-
     @Override
     public String getName() {
         return "RNViewShot";
@@ -86,6 +82,12 @@ public class RNViewShotModule extends ReactContextBaseJavaModule {
             }
             UIManagerModule uiManager = this.reactContext.getNativeModule(UIManagerModule.class);
             uiManager.addUIBlock(new ViewShot(tag, format, compressFormat, quality, width, height, file, result, snapshotContentContainer, promise));
+
+            //add by aqnaruto liaoyiheng
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri contentUri = Uri.fromFile(file);
+            mediaScanIntent.setData(contentUri);
+            getReactApplicationContext().sendBroadcast(mediaScanIntent);
         }
         catch (Exception e) {
             promise.reject(ViewShot.ERROR_UNABLE_TO_SNAPSHOT, "Failed to snapshot view tag "+tag);
