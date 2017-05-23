@@ -1,4 +1,6 @@
-
+---
+我向原作者提了pr，但是还是没有merge，遂fork此版本，解决安卓上 使用小米手机等相册找不到路径的bug
+---
 # react-native-view-shot ![](https://img.shields.io/npm/v/react-native-view-shot.svg) ![](https://img.shields.io/badge/react--native-%2040+-05F561.svg)
 
 Capture a React Native view to an image.
